@@ -1,35 +1,46 @@
 package com.leo.item.service;
 
 import com.leo.item.entity.Item;
+import com.leo.item.repo.ItemRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ItemService {
 
-    private static final Map<Long, Item> ITEM_MAP = new HashMap<Long, Item>();
+    private final ItemRepository itemRepository;
 
-    static {
-        ITEM_MAP.put(1L, new Item(1L, "商品1", "http://圖片1", "商品描述1", 1000L));
-        ITEM_MAP.put(2L, new Item(2L, "商品2", "http://圖片2", "商品描述2", 2000L));
-        ITEM_MAP.put(3L, new Item(3L, "商品3", "http://圖片3", "商品描述3", 3000L));
-        ITEM_MAP.put(4L, new Item(4L, "商品4", "http://圖片4", "商品描述4", 4000L));
-        ITEM_MAP.put(5L, new Item(5L, "商品5", "http://圖片5", "商品描述5", 5000L));
-        ITEM_MAP.put(6L, new Item(6L, "商品6", "http://圖片6", "商品描述6", 6000L));
-        ITEM_MAP.put(7L, new Item(7L, "商品7", "http://圖片7", "商品描述7", 7000L));
-        ITEM_MAP.put(8L, new Item(8L, "商品8", "http://圖片8", "商品描述8", 8000L));
-        ITEM_MAP.put(8L, new Item(9L, "商品9", "http://圖片9", "商品描述9", 9000L));
-        ITEM_MAP.put(8L, new Item(10L, "商品10", "http://圖片10", "商品描述10", 10000L));
+    public Item findById(Long id) {
+        return itemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"找不到 ID : " + id + "的商品"));
     }
 
+    public List<Item> findAll() {
+        return itemRepository.findAll();
+    }
 
-    /**
-     * 查詢商品
-     */
-    public Item queryItemById(Long id) {
-        return ITEM_MAP.get(id);
+    public Item createItem(Item item) {
+        return itemRepository.save(item);
+    }
+
+    public Item updateItem(Item item) {
+        if (!itemRepository.existsById(item.getId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到要更新的商品 ID：" + item.getId());
+        }
+        return itemRepository.save(item);
+    }
+
+    public void deleteById(Long id) {
+        if (!itemRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到要刪除的商品 ID：" + id);
+        }
+        itemRepository.deleteById(id);
     }
 
 }
