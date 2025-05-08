@@ -11,11 +11,11 @@ public class Item {
 
     private Long id;
 
-    private String title;
+    private String name;
 
-    private String pic;
+    private String image;
 
-    private String desc;
+    private String description;
 
     private Long price;
 

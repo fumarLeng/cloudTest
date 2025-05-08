@@ -23,12 +23,12 @@ public class Item {
     private Long id;
 
     @ApiModelProperty(value = "商品名稱", example = "商品1")
-    @Column(name = "title")
-    private String title;
+    @Column(name = "name")
+    private String name;
 
     @ApiModelProperty(value = "圖片網址", example = "http://圖片1")
-    @Column(name = "pic")
-    private String pic;
+    @Column(name = "image")
+    private String image;
 
     @ApiModelProperty(value = "商品描述", example = "商品描述1")
     @Column(name = "description")
